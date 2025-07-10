@@ -2,22 +2,10 @@
 name: CI
 on:  # yamllint disable-line rule:truthy
   pull_request:
-  workflow_call:
+  push:
 jobs:
-  test_frontend:
-    name: Test alertmanager frontend
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - run: make clean
-      - run: make all
-        working-directory: ./ui/app
-      - run: make assets
-      - run: make apiv2
-      - run: git diff --exit-code
-
   build:
-    name: Build Alertmanager for common architectures
+    name: Build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -43,4 +31,16 @@ jobs:
       - uses: prometheus/promci@c3c93a50d581b928af720f0134b2b2dad32a6c41 # v0.4.6
       - uses: ./.github/promci/actions/setup_environment
       - run: make
+      - run: git diff --exit-code
+
+  test_ui:
+    name: Test UI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - run: make clean
+      - run: make all
+        working-directory: ./ui/app
+      - run: make assets
+      - run: make apiv2
       - run: git diff --exit-code

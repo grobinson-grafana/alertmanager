@@ -1,7 +1,7 @@
 ---
-# This action is synced from https://github.com/prometheus/prometheus
-name: golangci-lint
+name: Lint
 on:
+  pull_request:
   push:
     paths:
       - "go.sum"
@@ -10,7 +10,6 @@ on:
       - "scripts/errcheck_excludes.txt"
       - ".github/workflows/golangci-lint.yml"
       - ".golangci.yml"
-  pull_request:
 
 permissions:  # added using https://github.com/step-security/secure-repo
   contents: read
@@ -20,7 +19,7 @@ jobs:
     permissions:
       contents: read  # for actions/checkout to fetch code
       pull-requests: read  # for golangci/golangci-lint-action to fetch pull requests
-    name: lint
+    name: golangci-lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
